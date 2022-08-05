@@ -7,12 +7,12 @@ import { BasicAuthenticationService } from '../basic-authentication/basic-authen
 import { createBasicAuthenticationServiceMock } from '../basic-authentication/basic-authentication.service.mock';
 import { SessionVaultService } from '../../session-vault/session-vault.service';
 import { createSessionVaultServiceMock } from '../../testing';
-import { AuthenticationExpeditorService } from './authentication-expeditor.service';
+import { AuthenticationExpediterService } from './authentication-expediter.service';
 import { Auth0AuthenticationService } from '../auth0-authentication/auth0-authentication.service';
 import { createAuth0AuthenticationServiceMock } from '../auth0-authentication/auth0-authentication.service.mock';
 
-describe('AuthenticationExpeditorService', () => {
-  let service: AuthenticationExpeditorService;
+describe('AuthenticationExpediterService', () => {
+  let service: AuthenticationExpediterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,7 +24,7 @@ describe('AuthenticationExpeditorService', () => {
         { provide: SessionVaultService, useFactory: createSessionVaultServiceMock },
       ],
     });
-    service = TestBed.inject(AuthenticationExpeditorService);
+    service = TestBed.inject(AuthenticationExpediterService);
   });
 
   it('should be created', () => {

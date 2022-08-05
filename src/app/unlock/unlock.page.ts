@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthenticationExpeditorService, SessionVaultService } from '@app/core';
+import { AuthenticationExpediterService, SessionVaultService } from '@app/core';
 import { NavController } from '@ionic/angular';
 
 @Component({
@@ -9,7 +9,7 @@ import { NavController } from '@ionic/angular';
 })
 export class UnlockPage {
   constructor(
-    private auth: AuthenticationExpeditorService,
+    private auth: AuthenticationExpediterService,
     private navController: NavController,
     private sessionVault: SessionVaultService
   ) {}

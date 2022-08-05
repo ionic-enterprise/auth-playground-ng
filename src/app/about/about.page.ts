@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationExpeditorService, SessionVaultService } from '@app/core';
+import { AuthenticationExpediterService, SessionVaultService } from '@app/core';
 import { NavController } from '@ionic/angular';
 import packageInfo from '../../../package.json';
 
@@ -16,7 +16,7 @@ export class AboutPage implements OnInit {
   identityVaultVersion: string;
 
   constructor(
-    private auth: AuthenticationExpeditorService,
+    private auth: AuthenticationExpediterService,
     private navController: NavController,
     private vault: SessionVaultService
   ) {}

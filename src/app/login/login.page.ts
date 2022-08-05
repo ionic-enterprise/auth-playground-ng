@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationExpeditorService, SessionVaultService } from '@app/core';
+import { AuthenticationExpediterService, SessionVaultService } from '@app/core';
 import { AuthProvider } from '@app/models';
 import { NavController } from '@ionic/angular';
 
@@ -14,7 +14,7 @@ export class LoginPage {
   password: string;
 
   constructor(
-    private auth: AuthenticationExpeditorService,
+    private auth: AuthenticationExpediterService,
     private navController: NavController,
     private vault: SessionVaultService
   ) {}

@@ -10,7 +10,7 @@ import { Auth0AuthenticationService } from '../auth0-authentication/auth0-authen
 @Injectable({
   providedIn: 'root',
 })
-export class AuthenticationExpeditorService {
+export class AuthenticationExpediterService {
   constructor(
     private auth0: Auth0AuthenticationService,
     private aws: AwsAuthenticationService,

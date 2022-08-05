@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { AuthenticationExpeditorService, SessionVaultService } from '@app/core';
-import { createAuthenticationExpeditorServiceMock, createSessionVaultServiceMock } from '@app/core/testing';
+import { AuthenticationExpediterService, SessionVaultService } from '@app/core';
+import { createAuthenticationExpediterServiceMock, createSessionVaultServiceMock } from '@app/core/testing';
 import { IonicModule, NavController } from '@ionic/angular';
 import { createNavControllerMock } from '@test/mocks';
 import { click } from '@test/util';
@@ -11,23 +11,21 @@ describe('UnlockPage', () => {
   let component: UnlockPage;
   let fixture: ComponentFixture<UnlockPage>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [UnlockPage],
-        imports: [IonicModule],
-        providers: [
-          { provide: AuthenticationExpeditorService, useFactory: createAuthenticationExpeditorServiceMock },
-          { provide: NavController, useFactory: createNavControllerMock },
-          { provide: SessionVaultService, useFactory: createSessionVaultServiceMock },
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [UnlockPage],
+      imports: [IonicModule],
+      providers: [
+        { provide: AuthenticationExpediterService, useFactory: createAuthenticationExpediterServiceMock },
+        { provide: NavController, useFactory: createNavControllerMock },
+        { provide: SessionVaultService, useFactory: createSessionVaultServiceMock },
+      ],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(UnlockPage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(UnlockPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -65,7 +63,7 @@ describe('UnlockPage', () => {
 
   describe('the redo button', () => {
     it('performs a logout', () => {
-      const auth = TestBed.inject(AuthenticationExpeditorService);
+      const auth = TestBed.inject(AuthenticationExpediterService);
       const button = fixture.debugElement.query(By.css('[data-testid="redo-button"]'));
       click(fixture, button.nativeElement);
       expect(auth.logout).toHaveBeenCalledTimes(1);

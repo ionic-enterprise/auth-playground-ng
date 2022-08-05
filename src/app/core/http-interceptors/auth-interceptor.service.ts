@@ -2,11 +2,11 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { AuthenticationExpeditorService } from '../authentication/authentication-expeditor/authentication-expeditor.service';
+import { AuthenticationExpediterService } from '../authentication/authentication-expediter/authentication-expediter.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private auth: AuthenticationExpeditorService) {}
+  constructor(private auth: AuthenticationExpediterService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return from(

@@ -1,8 +1,8 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { AuthenticationExpeditorService, SessionVaultService } from '@app/core';
-import { createAuthenticationExpeditorServiceMock, createSessionVaultServiceMock } from '@app/core/testing';
+import { AuthenticationExpediterService, SessionVaultService } from '@app/core';
+import { createAuthenticationExpediterServiceMock, createSessionVaultServiceMock } from '@app/core/testing';
 import { IonicModule, NavController } from '@ionic/angular';
 import { createNavControllerMock } from '@test/mocks';
 import { click, setInputValue } from '@test/util';
@@ -17,7 +17,7 @@ describe('LoginPage', () => {
       declarations: [LoginPage],
       imports: [FormsModule, IonicModule],
       providers: [
-        { provide: AuthenticationExpeditorService, useFactory: createAuthenticationExpeditorServiceMock },
+        { provide: AuthenticationExpediterService, useFactory: createAuthenticationExpediterServiceMock },
         {
           provide: NavController,
           useFactory: createNavControllerMock,
@@ -130,7 +130,7 @@ describe('LoginPage', () => {
     }));
 
     it('calls login', fakeAsync(() => {
-      const auth = TestBed.inject(AuthenticationExpeditorService);
+      const auth = TestBed.inject(AuthenticationExpediterService);
       const button = fixture.debugElement.query(By.css('[data-testid="basic-signin-button"]'));
       click(fixture, button.nativeElement);
       tick();
@@ -165,7 +165,7 @@ describe('LoginPage', () => {
 
     describe('on failure', () => {
       beforeEach(() => {
-        const auth = TestBed.inject(AuthenticationExpeditorService);
+        const auth = TestBed.inject(AuthenticationExpediterService);
         (auth.login as any).and.returnValue(Promise.reject(new Error('this shall not be')));
       });
 
@@ -198,7 +198,7 @@ describe('LoginPage', () => {
     }));
 
     it('calls login', fakeAsync(() => {
-      const auth = TestBed.inject(AuthenticationExpeditorService);
+      const auth = TestBed.inject(AuthenticationExpediterService);
       const button = fixture.debugElement.query(By.css('[data-testid="aws-signin-button"]'));
       click(fixture, button.nativeElement);
       tick();
@@ -233,7 +233,7 @@ describe('LoginPage', () => {
 
     describe('on failure', () => {
       beforeEach(() => {
-        const auth = TestBed.inject(AuthenticationExpeditorService);
+        const auth = TestBed.inject(AuthenticationExpediterService);
         (auth.login as any).and.returnValue(Promise.reject(new Error('this shall not be')));
       });
 
@@ -266,7 +266,7 @@ describe('LoginPage', () => {
     }));
 
     it('calls login', fakeAsync(() => {
-      const auth = TestBed.inject(AuthenticationExpeditorService);
+      const auth = TestBed.inject(AuthenticationExpediterService);
       const button = fixture.debugElement.query(By.css('[data-testid="azure-signin-button"]'));
       click(fixture, button.nativeElement);
       tick();
@@ -301,7 +301,7 @@ describe('LoginPage', () => {
 
     describe('on failure', () => {
       beforeEach(() => {
-        const auth = TestBed.inject(AuthenticationExpeditorService);
+        const auth = TestBed.inject(AuthenticationExpediterService);
         (auth.login as any).and.returnValue(Promise.reject(new Error('this shall not be')));
       });
 
