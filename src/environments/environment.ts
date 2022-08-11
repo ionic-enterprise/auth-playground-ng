@@ -28,9 +28,8 @@ export const webAuth0Config: IonicAuthOptions = {
 
 const awsConfig = {
   authConfig: 'cognito' as 'cognito',
-  clientID: '4geagm2idmq87fii15dq9toild',
+  clientID: '64p9c53l5thd5dikra675suvq9',
   discoveryUrl: 'https://cognito-idp.us-east-2.amazonaws.com/us-east-2_YU8VQe29z/.well-known/openid-configuration',
-  clientSecret: '124dch1p6824ppuef8o71unk14d4pt3p5hnntofvu21i2m960r1g',
   scope: 'openid email profile',
   audience: '',
 };
