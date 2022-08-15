@@ -214,7 +214,7 @@ describe('SessionVaultService', () => {
       { empty: true, locked: true },
       { empty: false, locked: false },
     ].forEach(({ empty, locked }) =>
-      it(`is ${empty && locked} for ${empty} ${locked}`, async () => {
+      it(`is ${!empty && locked} for ${empty} ${locked}`, async () => {
         (mockVault.isEmpty as any).and.returnValue(Promise.resolve(empty));
         (mockVault.isLocked as any).and.returnValue(Promise.resolve(locked));
         expect(await service.canUnlock()).toBe(!empty && locked);
@@ -231,7 +231,7 @@ describe('SessionVaultService', () => {
         { empty: true, locked: true },
         { empty: false, locked: false },
       ].forEach(({ empty, locked }) =>
-        it(`is ${empty && locked} for ${empty} ${locked}`, async () => {
+        it(`is false for ${empty} ${locked}`, async () => {
           (mockVault.isEmpty as any).and.returnValue(Promise.resolve(empty));
           (mockVault.isLocked as any).and.returnValue(Promise.resolve(locked));
           expect(await service.canUnlock()).toBe(false);
