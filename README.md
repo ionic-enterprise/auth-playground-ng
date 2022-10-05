@@ -1,8 +1,8 @@
 # Angular Auth Playground
 
-This application highlights the use of the Ionic Enterprise <a href="https://ionic.io/docs/auth-connect" target="_blank">Auth Connect</a> and <a href="https://ionic.io/docs/identity-vault/" target="_blank">Identity Vault</a> products in an Angular application. The application will run on both Android and iOS. In addition, it supports running in the web, allowing developers to remain in the more comfortable and productive web-based development environments while working on the application. Since the web does not have a secure biometrically locked key storage mechanism, however, the full potential of Identity Vault is only accessible through the native platforms.
+This application highlights the use of the Ionic Enterprise <a href="https://ionic.io/docs/auth-connect" target="_blank">Auth Connect</a> and <a href="https://ionic.io/docs/identity-vault/" target="_blank">Identity Vault</a> products in an Angular application. The application runs on both Android and iOS. In addition, it supports running in the web, allowing developers to remain in the more comfortable and productive web-based development environments while working on the application. Since the web does not have a secure biometrically locked key storage mechanism, however, the full potential of Identity Vault is only accessible through the native platforms.
 
-This application uses <a href="https://capacitorjs.com/docs/android/custom-code" target="_blank">Capacitor</a> to provide the native layer. This is the preferred technology to use for the native layer and the Customer Success team highly suggests using it over Cordova. However, Identity Vault and Auth Connect can both be used with either technology.
+This application uses <a href="https://capacitorjs.com/docs" target="_blank">Capacitor</a> to provide the native layer. This is the preferred technology to use for the native layer. The Customer Success team highly suggests using it over Cordova. However, Identity Vault and Auth Connect can both be used with either technology.
 
 The purpose of this application is to show the use of much of the `Vault` and `Device` APIs of Identity Vault as well as how Identity Vault and Auth Connect work together to provide a secure authentication solution.
 
@@ -43,9 +43,9 @@ We have gone beyond that with this application so we could allow the user to man
 
 ### The Authentication Services
 
-#### Authentication Expeditor Service
+#### Authentication Expediter Service
 
-The `AuthenticationExpeditorService` is a layer that allows us to use different methods for authentication, and then manages how the user is currently authenticated so the proper flows can be followed. The idea is to abstract all of the associated business logic of managing the provider to this layer.
+The `AuthenticationExpediterService` is a layer that allows us to use different methods for authentication, and then manages how the user is currently authenticated so the proper flows can be followed. The idea is to abstract all of the associated business logic of managing the provider to this layer.
 
 In an architecture that support only one provider (which is more typical), this layer is not necessary and you would directly use the single `AuthenticationService` instead. That is, you would likely have a single `AuthenticationService` that is similar to this application's `AwsAuthenticationService`, and you would directly use it instead.
 
