@@ -69,7 +69,7 @@ Obviously, some of this we could do some work to get around. However, the fact t
 
 #### The Token Storage Provider
 
-With the OIDC related services, we also specify a token storage provider, using the `vault` object from our `SessionVaultService`. If you do not specify a token storage provider, Auth Connect will use a default provider that utilizes `localstorage`. The default provider, however, is only intended for development use. In a production scenario we suggest pairing Auth Connect with Identity Vault for a complete solution.
+With the OIDC related services, we also specify a token storage provider in the form of our `SessionVaultService`. If you do not specify a token storage provider, Auth Connect will use a default provider that utilizes `localstorage`. The default provider, however, is only intended for development use. In a production scenario we suggest pairing Auth Connect with Identity Vault as we do here. Doing so provides a complete authentication solution.
 
 ### The PIN Dialog
 
