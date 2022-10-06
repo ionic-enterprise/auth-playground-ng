@@ -47,6 +47,7 @@
     "@angular/compiler": "^14.0.1",
     "@angular/compiler-cli": "^14.0.1",
     "@angular/language-service": "^14.0.1",
+    "@capacitor/assets": "~1.0.10",
     "@capacitor/cli": "^4.0.0",
     "@ionic/angular-toolkit": "~7.0.0",
     "@ionic/prettier-config": "~2.0.0",
