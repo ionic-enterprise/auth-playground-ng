@@ -5,6 +5,7 @@ import { createAuthenticationExpediterServiceMock, createSessionVaultServiceMock
 import { IonicModule, NavController } from '@ionic/angular';
 import { createNavControllerMock } from '@test/mocks';
 import { click } from '@test/util';
+import jasmine from 'jasmine';
 import { UnlockPage } from './unlock.page';
 
 describe('UnlockPage', () => {
@@ -32,31 +33,63 @@ describe('UnlockPage', () => {
   });
 
   describe('the unlock button', () => {
-    it('unlocks the vault', () => {
-      const sessionVault = TestBed.inject(SessionVaultService);
-      const button = fixture.debugElement.query(By.css('[data-testid="unlock-button"]'));
-      click(fixture, button.nativeElement);
-      expect(sessionVault.unlock).toHaveBeenCalledTimes(1);
-    });
-
-    it('navigates to the root', fakeAsync(() => {
-      const navController = TestBed.inject(NavController);
-      const button = fixture.debugElement.query(By.css('[data-testid="unlock-button"]'));
-      click(fixture, button.nativeElement);
-      tick();
-      expect(navController.navigateRoot).toHaveBeenCalledTimes(1);
-      expect(navController.navigateRoot).toHaveBeenCalledWith(['/']);
-    }));
-
-    describe('when the user cancels', () => {
-      it('does not navigate', fakeAsync(() => {
-        const navController = TestBed.inject(NavController);
+    describe('while the user can still unlock', () => {
+      beforeEach(() => {
         const sessionVault = TestBed.inject(SessionVaultService);
-        (sessionVault.unlock as any).and.returnValue(Promise.reject(new Error('whatever, dude')));
+        (sessionVault.canUnlock as jasmine.Spy).and.resolveTo(true);
+      });
+
+      it('unlocks the vault', fakeAsync(() => {
+        const sessionVault = TestBed.inject(SessionVaultService);
         const button = fixture.debugElement.query(By.css('[data-testid="unlock-button"]'));
         click(fixture, button.nativeElement);
         tick();
-        expect(navController.navigateRoot).not.toHaveBeenCalled();
+        expect(sessionVault.unlock).toHaveBeenCalledTimes(1);
+      }));
+
+      it('navigates to the root', fakeAsync(() => {
+        const navController = TestBed.inject(NavController);
+        const button = fixture.debugElement.query(By.css('[data-testid="unlock-button"]'));
+        click(fixture, button.nativeElement);
+        tick();
+        expect(navController.navigateRoot).toHaveBeenCalledTimes(1);
+        expect(navController.navigateRoot).toHaveBeenCalledWith(['/']);
+      }));
+
+      describe('when the user cancels', () => {
+        it('does not navigate', fakeAsync(() => {
+          const navController = TestBed.inject(NavController);
+          const sessionVault = TestBed.inject(SessionVaultService);
+          (sessionVault.unlock as any).and.returnValue(Promise.reject(new Error('whatever, dude')));
+          const button = fixture.debugElement.query(By.css('[data-testid="unlock-button"]'));
+          click(fixture, button.nativeElement);
+          tick();
+          expect(navController.navigateRoot).not.toHaveBeenCalled();
+        }));
+      });
+    });
+
+    describe('once the user can no longer unlock', () => {
+      beforeEach(() => {
+        const sessionVault = TestBed.inject(SessionVaultService);
+        (sessionVault.canUnlock as jasmine.Spy).and.resolveTo(false);
+      });
+
+      it('does not unlock the vault', fakeAsync(() => {
+        const sessionVault = TestBed.inject(SessionVaultService);
+        const button = fixture.debugElement.query(By.css('[data-testid="unlock-button"]'));
+        click(fixture, button.nativeElement);
+        tick();
+        expect(sessionVault.unlock).not.toHaveBeenCalled();
+      }));
+
+      it('navigates to the login page', fakeAsync(() => {
+        const navController = TestBed.inject(NavController);
+        const button = fixture.debugElement.query(By.css('[data-testid="unlock-button"]'));
+        click(fixture, button.nativeElement);
+        tick();
+        expect(navController.navigateRoot).toHaveBeenCalledTimes(1);
+        expect(navController.navigateRoot).toHaveBeenCalledWith(['/', 'login']);
       }));
     });
   });

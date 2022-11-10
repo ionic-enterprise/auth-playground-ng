@@ -14,7 +14,20 @@ export class UnlockPage {
     private sessionVault: SessionVaultService
   ) {}
 
-  async unlock() {
+  async unlock(): Promise<void> {
+    if (await this.sessionVault.canUnlock()) {
+      await this.tryUnlock();
+    } else {
+      this.navController.navigateRoot(['/', 'login']);
+    }
+  }
+
+  async redo(): Promise<void> {
+    await this.auth.logout();
+    this.navController.navigateRoot(['/', 'login']);
+  }
+
+  private async tryUnlock(): Promise<void> {
     try {
       await this.sessionVault.unlock();
       this.navController.navigateRoot(['/']);
@@ -22,10 +35,5 @@ export class UnlockPage {
       // you could alert or otherwise set an error message
       // the most common failure is the user cancelling, so we just don't navigate
     }
-  }
-
-  async redo() {
-    await this.auth.logout();
-    this.navController.navigateRoot(['/', 'login']);
   }
 }
