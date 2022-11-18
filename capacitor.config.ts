@@ -5,6 +5,11 @@ const config: CapacitorConfig = {
   appName: 'Auth Playground NG',
   webDir: 'www',
   bundledWebRuntime: false,
+  plugins: {
+    SplashScreen: {
+      launchAutoHide: false,
+    },
+  },
 };
 
 export default config;

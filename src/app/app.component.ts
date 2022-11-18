@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { Device } from '@ionic-enterprise/identity-vault';
 import { NavController } from '@ionic/angular';
 import { SessionVaultService } from './core';
@@ -17,6 +18,8 @@ export class AppComponent implements OnInit {
         this.navController.navigateRoot(['/', 'unlock']);
       }
     });
+
+    SplashScreen.hide();
 
     Device.setHideScreenOnBackground(true);
   }
