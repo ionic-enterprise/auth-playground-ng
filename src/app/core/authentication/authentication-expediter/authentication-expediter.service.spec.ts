@@ -1,15 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { AwsAuthenticationService } from '../aws-authentication/aws-authentication.service';
-import { createAwsAuthenticationServiceMock } from '../aws-authentication/aws-authentication.service.mock';
-import { AzureAuthenticationService } from '../azure-authentication/azure-authentication.service';
-import { createAzureAuthenticationServiceMock } from '../azure-authentication/azure-authentication.service.mock';
-import { BasicAuthenticationService } from '../basic-authentication/basic-authentication.service';
-import { createBasicAuthenticationServiceMock } from '../basic-authentication/basic-authentication.service.mock';
+import { AuthProvider } from '@app/models';
 import { SessionVaultService } from '../../session-vault/session-vault.service';
 import { createSessionVaultServiceMock } from '../../testing';
+import { BasicAuthenticationService } from '../basic-authentication/basic-authentication.service';
+import { createBasicAuthenticationServiceMock } from '../basic-authentication/basic-authentication.service.mock';
+import { OIDCAuthenticationService } from '../oidc-authentication/oidc-authentication.service';
+import { createOIDCAuthenticationServiceMock } from '../oidc-authentication/oidc-authentication.service.mock';
 import { AuthenticationExpediterService } from './authentication-expediter.service';
-import { Auth0AuthenticationService } from '../auth0-authentication/auth0-authentication.service';
-import { createAuth0AuthenticationServiceMock } from '../auth0-authentication/auth0-authentication.service.mock';
 
 describe('AuthenticationExpediterService', () => {
   let service: AuthenticationExpediterService;
@@ -17,9 +14,7 @@ describe('AuthenticationExpediterService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: Auth0AuthenticationService, useFactory: createAuth0AuthenticationServiceMock },
-        { provide: AwsAuthenticationService, useFactory: createAwsAuthenticationServiceMock },
-        { provide: AzureAuthenticationService, useFactory: createAzureAuthenticationServiceMock },
+        { provide: OIDCAuthenticationService, useFactory: createOIDCAuthenticationServiceMock },
         { provide: BasicAuthenticationService, useFactory: createBasicAuthenticationServiceMock },
         { provide: SessionVaultService, useFactory: createSessionVaultServiceMock },
       ],
@@ -31,140 +26,78 @@ describe('AuthenticationExpediterService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('when using Auth0', () => {
-    beforeEach(() => {
-      const vault = TestBed.inject(SessionVaultService);
-      (vault.getAuthProvider as any).and.returnValue(Promise.resolve('Auth0'));
-    });
-
-    describe('login', () => {
-      it('calls the Auth0 login', async () => {
-        const aws = TestBed.inject(Auth0AuthenticationService);
-        await service.login('Auth0');
-        expect(aws.login).toHaveBeenCalledTimes(1);
-      });
-
-      it('saves the auth provider', async () => {
+  ['Auth0', 'AWS', 'Azure'].forEach((provider: AuthProvider) => {
+    describe(`when using ${provider}`, () => {
+      beforeEach(() => {
         const vault = TestBed.inject(SessionVaultService);
-        await service.login('Auth0');
-        expect(vault.setAuthProvider).toHaveBeenCalledTimes(1);
-        expect(vault.setAuthProvider).toHaveBeenCalledWith('Auth0');
-      });
-    });
-
-    describe('logout', () => {
-      it('calls the Auth0 logout', async () => {
-        const aws = TestBed.inject(Auth0AuthenticationService);
-        await service.logout();
-        expect(aws.logout).toHaveBeenCalledTimes(1);
-      });
-    });
-
-    describe('get access token', () => {
-      it('gets the Auth0 access token', async () => {
-        const aws = TestBed.inject(Auth0AuthenticationService);
-        await service.getAccessToken();
-        expect(aws.getAccessToken).toHaveBeenCalledTimes(1);
-      });
-    });
-
-    describe('is authenticated', () => {
-      it('checks with Auth0 if the user is authenticated', async () => {
-        const aws = TestBed.inject(Auth0AuthenticationService);
-        await service.isAuthenticated();
-        expect(aws.isAuthenticated).toHaveBeenCalledTimes(1);
-      });
-    });
-  });
-
-  describe('when using AWS', () => {
-    beforeEach(() => {
-      const vault = TestBed.inject(SessionVaultService);
-      (vault.getAuthProvider as any).and.returnValue(Promise.resolve('AWS'));
-    });
-
-    describe('login', () => {
-      it('calls the AWS login', async () => {
-        const aws = TestBed.inject(AwsAuthenticationService);
-        await service.login('AWS');
-        expect(aws.login).toHaveBeenCalledTimes(1);
+        (vault.getAuthProvider as any).and.returnValue(Promise.resolve(provider));
       });
 
-      it('saves the auth provider', async () => {
-        const vault = TestBed.inject(SessionVaultService);
-        await service.login('AWS');
-        expect(vault.setAuthProvider).toHaveBeenCalledTimes(1);
-        expect(vault.setAuthProvider).toHaveBeenCalledWith('AWS');
-      });
-    });
+      describe('login', () => {
+        it('sets up the OIDC service', async () => {
+          const oidc = TestBed.inject(OIDCAuthenticationService);
+          await service.login(provider);
+          expect(oidc.setAuthProvider).toHaveBeenCalledTimes(1);
+          expect(oidc.setAuthProvider).toHaveBeenCalledWith(provider);
+        });
 
-    describe('logout', () => {
-      it('calls the AWS logout', async () => {
-        const aws = TestBed.inject(AwsAuthenticationService);
-        await service.logout();
-        expect(aws.logout).toHaveBeenCalledTimes(1);
-      });
-    });
+        it('calls the OIDC login', async () => {
+          const oidc = TestBed.inject(OIDCAuthenticationService);
+          await service.login(provider);
+          expect(oidc.login).toHaveBeenCalledTimes(1);
+        });
 
-    describe('get access token', () => {
-      it('gets the AWS access token', async () => {
-        const aws = TestBed.inject(AwsAuthenticationService);
-        await service.getAccessToken();
-        expect(aws.getAccessToken).toHaveBeenCalledTimes(1);
-      });
-    });
-
-    describe('is authenticated', () => {
-      it('checks with AWS if the user is authenticated', async () => {
-        const aws = TestBed.inject(AwsAuthenticationService);
-        await service.isAuthenticated();
-        expect(aws.isAuthenticated).toHaveBeenCalledTimes(1);
-      });
-    });
-  });
-
-  describe('when using Azure', () => {
-    beforeEach(() => {
-      const vault = TestBed.inject(SessionVaultService);
-      (vault.getAuthProvider as any).and.returnValue(Promise.resolve('Azure'));
-    });
-
-    describe('login', () => {
-      it('calls the Azure login', async () => {
-        const azure = TestBed.inject(AzureAuthenticationService);
-        await service.login('Azure');
-        expect(azure.login).toHaveBeenCalledTimes(1);
+        it('saves the auth provider', async () => {
+          const vault = TestBed.inject(SessionVaultService);
+          await service.login(provider);
+          expect(vault.setAuthProvider).toHaveBeenCalledTimes(1);
+          expect(vault.setAuthProvider).toHaveBeenCalledWith(provider);
+        });
       });
 
-      it('saves the auth provider', async () => {
-        const vault = TestBed.inject(SessionVaultService);
-        await service.login('Azure');
-        expect(vault.setAuthProvider).toHaveBeenCalledTimes(1);
-        expect(vault.setAuthProvider).toHaveBeenCalledWith('Azure');
-      });
-    });
+      describe('logout', () => {
+        it('sets up the OIDC service to', async () => {
+          const oidc = TestBed.inject(OIDCAuthenticationService);
+          await service.logout();
+          expect(oidc.setAuthProvider).toHaveBeenCalledTimes(1);
+          expect(oidc.setAuthProvider).toHaveBeenCalledWith(provider);
+        });
 
-    describe('logout', () => {
-      it('calls the Azure logout', async () => {
-        const azure = TestBed.inject(AzureAuthenticationService);
-        await service.logout();
-        expect(azure.logout).toHaveBeenCalledTimes(1);
+        it('calls the OIDC logout', async () => {
+          const oidc = TestBed.inject(OIDCAuthenticationService);
+          await service.logout();
+          expect(oidc.logout).toHaveBeenCalledTimes(1);
+        });
       });
-    });
 
-    describe('get access token', () => {
-      it('gets the Azure access token', async () => {
-        const azure = TestBed.inject(AzureAuthenticationService);
-        await service.getAccessToken();
-        expect(azure.getAccessToken).toHaveBeenCalledTimes(1);
+      describe('get access token', () => {
+        it('sets up the OIDC service', async () => {
+          const oidc = TestBed.inject(OIDCAuthenticationService);
+          await service.getAccessToken();
+          expect(oidc.setAuthProvider).toHaveBeenCalledTimes(1);
+          expect(oidc.setAuthProvider).toHaveBeenCalledWith(provider);
+        });
+
+        it('gets the OIDC access token', async () => {
+          const oidc = TestBed.inject(OIDCAuthenticationService);
+          await service.getAccessToken();
+          expect(oidc.getAccessToken).toHaveBeenCalledTimes(1);
+        });
       });
-    });
 
-    describe('is authenticated', () => {
-      it('checks with Azure if the user is authenticated', async () => {
-        const azure = TestBed.inject(AzureAuthenticationService);
-        await service.isAuthenticated();
-        expect(azure.isAuthenticated).toHaveBeenCalledTimes(1);
+      describe('is authenticated', () => {
+        it('sets up the OIDC service', async () => {
+          const oidc = TestBed.inject(OIDCAuthenticationService);
+          await service.isAuthenticated();
+          expect(oidc.setAuthProvider).toHaveBeenCalledTimes(1);
+          expect(oidc.setAuthProvider).toHaveBeenCalledWith(provider);
+        });
+
+        it('checks with OIDC if the user is authenticated', async () => {
+          const oidc = TestBed.inject(OIDCAuthenticationService);
+          await service.isAuthenticated();
+          expect(oidc.isAuthenticated).toHaveBeenCalledTimes(1);
+        });
       });
     });
   });

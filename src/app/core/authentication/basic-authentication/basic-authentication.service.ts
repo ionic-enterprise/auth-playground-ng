@@ -41,9 +41,9 @@ export class BasicAuthenticationService implements Authenticator {
     return this.vault.clear();
   }
 
-  async getAccessToken(): Promise<string | null> {
+  async getAccessToken(): Promise<string | void> {
     const session = await this.vault.getValue('session');
-    return session && session.token;
+    return session?.token;
   }
 
   async isAuthenticated(): Promise<boolean> {

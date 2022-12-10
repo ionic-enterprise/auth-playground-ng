@@ -1,20 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AuthProvider } from '@app/models';
-import { AwsAuthenticationService } from '../aws-authentication/aws-authentication.service';
-import { AzureAuthenticationService } from '../azure-authentication/azure-authentication.service';
-import { BasicAuthenticationService } from '../basic-authentication/basic-authentication.service';
 import { SessionVaultService } from '../../session-vault/session-vault.service';
 import { Authenticator } from '../authenticator';
-import { Auth0AuthenticationService } from '../auth0-authentication/auth0-authentication.service';
+import { BasicAuthenticationService } from '../basic-authentication/basic-authentication.service';
+import { OIDCAuthenticationService } from '../oidc-authentication/oidc-authentication.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationExpediterService {
   constructor(
-    private auth0: Auth0AuthenticationService,
-    private aws: AwsAuthenticationService,
-    private azure: AzureAuthenticationService,
+    private oidc: OIDCAuthenticationService,
     private basic: BasicAuthenticationService,
     private vault: SessionVaultService
   ) {}
@@ -41,7 +37,7 @@ export class AuthenticationExpediterService {
     return Promise.reject(new Error(`Invalid provider: ${provider}`));
   }
 
-  async getAccessToken(): Promise<string> {
+  async getAccessToken(): Promise<string | void> {
     const provider = await this.vault.getAuthProvider();
     const auth = this.getAuthService(provider);
     if (auth) {
@@ -59,13 +55,10 @@ export class AuthenticationExpediterService {
   private getAuthService(provider: AuthProvider): Authenticator | null {
     switch (provider) {
       case 'Auth0':
-        return this.auth0;
-
       case 'AWS':
-        return this.aws;
-
       case 'Azure':
-        return this.azure;
+        this.oidc.setAuthProvider(provider);
+        return this.oidc;
 
       case 'Basic':
         return this.basic;

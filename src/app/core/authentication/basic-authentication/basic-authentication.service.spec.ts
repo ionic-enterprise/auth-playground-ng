@@ -143,7 +143,7 @@ describe('BasicAuthenticationService', () => {
       const vault = TestBed.inject(SessionVaultService);
       (vault.getValue as any).withArgs('session').and.returnValue(Promise.resolve(null));
       const token = await service.getAccessToken();
-      expect(token).toEqual(null);
+      expect(token).toBeUndefined();
     });
   });
 
