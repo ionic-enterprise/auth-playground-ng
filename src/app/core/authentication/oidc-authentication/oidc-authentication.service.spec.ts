@@ -57,7 +57,7 @@ const testAuthResult = {
           webView: 'private',
         },
         web: {
-          implicitLogin: 'popup',
+          uiMode: 'popup',
           authFlow: 'implicit',
         },
       });
