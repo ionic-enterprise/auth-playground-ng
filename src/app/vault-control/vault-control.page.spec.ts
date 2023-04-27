@@ -2,8 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SessionVaultService } from '@app/core';
 import { createSessionVaultServiceMock } from '@app/core/testing';
-import { SharedModule } from '@app/shared/shared.module';
-import { IonicModule, NavController, Platform } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { createNavControllerMock, createPlatformMock } from '@test/mocks';
 import { click } from '@test/util';
 import { VaultControlPage } from './vault-control.page';
@@ -14,14 +13,13 @@ describe('VaultControlPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [VaultControlPage],
-      imports: [IonicModule, SharedModule],
-      providers: [
-        { provide: NavController, useFactory: createNavControllerMock },
-        { provide: Platform, useFactory: createPlatformMock },
-        { provide: SessionVaultService, useFactory: createSessionVaultServiceMock },
-      ],
-    }).compileComponents();
+      imports: [VaultControlPage],
+      providers: [],
+    })
+      .overrideProvider(NavController, { useFactory: createNavControllerMock })
+      .overrideProvider(Platform, { useFactory: createPlatformMock })
+      .overrideProvider(SessionVaultService, { useFactory: createSessionVaultServiceMock })
+      .compileComponents();
 
     fixture = TestBed.createComponent(VaultControlPage);
     component = fixture.componentInstance;

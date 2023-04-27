@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SessionVaultService } from '@app/core';
 import { createSessionVaultServiceMock } from '@app/core/testing';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { createOverlayControllerMock, createOverlayElementMock } from '@test/mocks';
 import { click } from '@test/util';
 
@@ -17,13 +17,12 @@ describe('ValueListPage', () => {
   beforeEach(waitForAsync(() => {
     alert = createOverlayElementMock('Alert');
     TestBed.configureTestingModule({
-      declarations: [ValueListPage],
-      imports: [IonicModule, RouterTestingModule],
-      providers: [
-        { provide: AlertController, useFactory: () => createOverlayControllerMock('AlertController', alert) },
-        { provide: SessionVaultService, useFactory: createSessionVaultServiceMock },
-      ],
-    }).compileComponents();
+      imports: [ValueListPage, RouterTestingModule],
+      providers: [],
+    })
+      .overrideProvider(AlertController, { useFactory: () => createOverlayControllerMock('AlertController', alert) })
+      .overrideProvider(SessionVaultService, { useFactory: createSessionVaultServiceMock })
+      .compileComponents();
 
     fixture = TestBed.createComponent(ValueListPage);
     component = fixture.componentInstance;

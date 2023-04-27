@@ -1,12 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { TeaService } from '@app/core';
 import { Tea } from '@app/models';
+import { IonicModule } from '@ionic/angular';
 import { map, mergeMap, Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tea-ist',
   templateUrl: 'tea-list.page.html',
   styleUrls: ['tea-list.page.scss'],
+  standalone: true,
+  imports: [IonicModule, CommonModule, FormsModule],
 })
 export class TeaListPage implements OnInit {
   teas$: Observable<Array<Array<Tea>>>;

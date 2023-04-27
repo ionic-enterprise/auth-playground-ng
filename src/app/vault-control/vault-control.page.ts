@@ -1,12 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { SessionVaultService } from '@app/core';
+import { VaultTypePipe } from '@app/shared/vault-type.pipe';
 import { Device, IdentityVaultConfig, VaultType } from '@ionic-enterprise/identity-vault';
-import { NavController, Platform } from '@ionic/angular';
+import { IonicModule, NavController, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-vault-control',
   templateUrl: 'vault-control.page.html',
   styleUrls: ['vault-control.page.scss'],
+  standalone: true,
+  imports: [IonicModule, CommonModule, FormsModule, VaultTypePipe],
 })
 export class VaultControlPage {
   disableDeviceUnlock = true;

@@ -4,8 +4,6 @@ import { By } from '@angular/platform-browser';
 import { TeaService } from '@app/core';
 import { createTeaServiceMock } from '@app/core/testing';
 import { Tea } from '@app/models';
-import { IonicModule, NavController } from '@ionic/angular';
-import { createNavControllerMock } from '@test/mocks';
 import { of } from 'rxjs';
 import { TeaListPage } from './tea-list.page';
 
@@ -14,23 +12,21 @@ describe('TeaListPage', () => {
   let fixture: ComponentFixture<TeaListPage>;
   let teas: Array<Tea>;
 
-  beforeEach(
-    waitForAsync(() => {
-      initializeTestData();
-      TestBed.configureTestingModule({
-        declarations: [TeaListPage],
-        imports: [IonicModule.forRoot()],
-        providers: [{ provide: TeaService, useFactory: createTeaServiceMock }],
-      }).compileComponents();
-
-      const teaService = TestBed.inject(TeaService);
-      (teaService.getAll as any).and.returnValue(of(teas));
-
-      fixture = TestBed.createComponent(TeaListPage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+  beforeEach(waitForAsync(() => {
+    initializeTestData();
+    TestBed.configureTestingModule({
+      imports: [TeaListPage],
     })
-  );
+      .overrideProvider(TeaService, { useFactory: createTeaServiceMock })
+      .compileComponents();
+
+    const teaService = TestBed.inject(TeaService);
+    (teaService.getAll as any).and.returnValue(of(teas));
+
+    fixture = TestBed.createComponent(TeaListPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

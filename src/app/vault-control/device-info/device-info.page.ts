@@ -1,11 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Device } from '@ionic-enterprise/identity-vault';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-device-info',
   templateUrl: './device-info.page.html',
   styleUrls: ['./device-info.page.scss'],
+  standalone: true,
+  imports: [CommonModule, FormsModule, IonicModule],
 })
 export class DeviceInfoPage implements OnInit {
   biometricStrength: string;

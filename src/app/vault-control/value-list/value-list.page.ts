@@ -1,11 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { SessionVaultService } from '@app/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-value-list',
   templateUrl: './value-list.page.html',
   styleUrls: ['./value-list.page.scss'],
+  standalone: true,
+  imports: [CommonModule, FormsModule, IonicModule],
 })
 export class ValueListPage implements OnInit {
   values: Array<{ key: string; value?: any }>;

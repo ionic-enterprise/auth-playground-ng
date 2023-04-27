@@ -3,6 +3,7 @@ import { VaultType } from '@ionic-enterprise/identity-vault';
 
 @Pipe({
   name: 'vaultType',
+  standalone: true,
 })
 export class VaultTypePipe implements PipeTransform {
   transform(value?: VaultType): string {
