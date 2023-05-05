@@ -46,12 +46,12 @@ export class OIDCAuthenticationService implements Authenticator {
       this.sessionVault.setValue(this.authResultKey, res);
     } catch (err: any) {
       // eslint-disable-next-line
-      console.log('login error:', +err);
-      const message: string = err.message;
+      console.log('login error:', err);
+      const message: string = err.errorMessage;
       if (
         this.options.clientId === environment.azureConfig.clientId &&
         message !== undefined &&
-        message.startsWith('AADB2C90118')
+        message.includes('AADB2C90118')
       ) {
         // This is to handle the password reset case for Azure AD and is only applicable to Azure  AD
         // The address you pass back is the custom user flow (policy) endpoint
