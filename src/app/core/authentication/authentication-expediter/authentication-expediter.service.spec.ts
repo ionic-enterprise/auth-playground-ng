@@ -30,7 +30,7 @@ describe('AuthenticationExpediterService', () => {
     describe(`when using ${provider}`, () => {
       beforeEach(() => {
         const vault = TestBed.inject(SessionVaultService);
-        (vault.getAuthProvider as any).and.returnValue(Promise.resolve(provider));
+        (vault.getAuthProvider as jasmine.Spy).and.returnValue(Promise.resolve(provider));
       });
 
       describe('login', () => {
@@ -105,7 +105,7 @@ describe('AuthenticationExpediterService', () => {
   describe('when using Basic', () => {
     beforeEach(() => {
       const vault = TestBed.inject(SessionVaultService);
-      (vault.getAuthProvider as any).and.returnValue(Promise.resolve('Basic'));
+      (vault.getAuthProvider as jasmine.Spy).and.returnValue(Promise.resolve('Basic'));
     });
 
     describe('login', () => {

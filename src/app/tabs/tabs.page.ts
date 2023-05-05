@@ -10,6 +10,4 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule],
 })
-export class TabsPage {
-  constructor() {}
-}
+export class TabsPage {}

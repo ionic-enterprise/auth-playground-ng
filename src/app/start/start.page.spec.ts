@@ -32,13 +32,13 @@ describe('StartPage', () => {
     describe('when the vault is locked', () => {
       beforeEach(() => {
         const sessionVault = TestBed.inject(SessionVaultService);
-        (sessionVault.canUnlock as any).and.returnValue(Promise.resolve(true));
+        (sessionVault.canUnlock as jasmine.Spy).and.returnValue(Promise.resolve(true));
       });
 
       describe('on mobile', () => {
         beforeEach(() => {
           const platform = TestBed.inject(Platform);
-          (platform.is as any).withArgs('hybrid').and.returnValue(true);
+          (platform.is as jasmine.Spy).withArgs('hybrid').and.returnValue(true);
         });
 
         it('navigates to the unlock page', fakeAsync(() => {
@@ -53,7 +53,7 @@ describe('StartPage', () => {
       describe('on web', () => {
         beforeEach(() => {
           const platform = TestBed.inject(Platform);
-          (platform.is as any).withArgs('hybrid').and.returnValue(false);
+          (platform.is as jasmine.Spy).withArgs('hybrid').and.returnValue(false);
         });
 
         it('navigates to the tea list', fakeAsync(() => {
@@ -69,13 +69,13 @@ describe('StartPage', () => {
     describe('when the vault is unlocked', () => {
       beforeEach(() => {
         const sessionVault = TestBed.inject(SessionVaultService);
-        (sessionVault.canUnlock as any).and.returnValue(Promise.resolve(false));
+        (sessionVault.canUnlock as jasmine.Spy).and.returnValue(Promise.resolve(false));
       });
 
       describe('on mobile', () => {
         beforeEach(() => {
           const platform = TestBed.inject(Platform);
-          (platform.is as any).withArgs('hybrid').and.returnValue(true);
+          (platform.is as jasmine.Spy).withArgs('hybrid').and.returnValue(true);
         });
 
         it('navigates to the tea list page', fakeAsync(() => {
@@ -90,7 +90,7 @@ describe('StartPage', () => {
       describe('on web', () => {
         beforeEach(() => {
           const platform = TestBed.inject(Platform);
-          (platform.is as any).withArgs('hybrid').and.returnValue(false);
+          (platform.is as jasmine.Spy).withArgs('hybrid').and.returnValue(false);
         });
 
         it('navigates to the tea list', fakeAsync(() => {

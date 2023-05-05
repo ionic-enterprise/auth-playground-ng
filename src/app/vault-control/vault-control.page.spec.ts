@@ -34,7 +34,7 @@ describe('VaultControlPage', () => {
     let sessionVault: SessionVaultService;
     beforeEach(async () => {
       const platform = TestBed.inject(Platform);
-      (platform.is as any).withArgs('hybrid').and.returnValue(true);
+      (platform.is as jasmine.Spy).withArgs('hybrid').and.returnValue(true);
       await component.ionViewDidEnter();
       sessionVault = TestBed.inject(SessionVaultService);
     });

@@ -5,6 +5,8 @@ import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+type TeaResponse = Omit<Tea, 'image'>;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,10 +18,10 @@ export class TeaService {
   getAll(): Observable<Array<Tea>> {
     return this.http
       .get(`${environment.dataService}/tea-categories`)
-      .pipe(map((teas: Array<any>) => teas.map((t) => this.convert(t))));
+      .pipe(map((teas: Array<TeaResponse>) => teas.map((t) => this.convert(t))));
   }
 
-  private convert(t: any): Tea {
+  private convert(t: TeaResponse): Tea {
     return {
       ...t,
       image: `assets/img/${this.images[t.id - 1]}.jpg`,

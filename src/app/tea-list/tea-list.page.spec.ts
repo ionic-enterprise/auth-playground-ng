@@ -21,7 +21,7 @@ describe('TeaListPage', () => {
       .compileComponents();
 
     const teaService = TestBed.inject(TeaService);
-    (teaService.getAll as any).and.returnValue(of(teas));
+    (teaService.getAll as jasmine.Spy).and.returnValue(of(teas));
 
     fixture = TestBed.createComponent(TeaListPage);
     component = fixture.componentInstance;

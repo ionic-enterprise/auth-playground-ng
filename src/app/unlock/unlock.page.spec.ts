@@ -57,7 +57,7 @@ describe('UnlockPage', () => {
         it('does not navigate', fakeAsync(() => {
           const navController = TestBed.inject(NavController);
           const sessionVault = TestBed.inject(SessionVaultService);
-          (sessionVault.unlock as any).and.returnValue(Promise.reject(new Error('whatever, dude')));
+          (sessionVault.unlock as jasmine.Spy).and.returnValue(Promise.reject(new Error('whatever, dude')));
           const button = fixture.debugElement.query(By.css('[data-testid="unlock-button"]'));
           click(fixture, button.nativeElement);
           tick();

@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { PinDialogComponent } from '@app/pin-dialog/pin-dialog.component';
 import {
   BiometricPermissionState,
@@ -40,11 +40,11 @@ describe('SessionVaultService', () => {
     };
     preferencesVault = jasmine.createSpyObj<Vault>('PreferencesVault', vaultObject);
     mockVault = jasmine.createSpyObj<Vault>('Vault', vaultObject);
-    (mockVault.onLock as any).and.callFake((callback: () => void) => (onLockCallback = callback));
-    (mockVault.onPasscodeRequested as any).and.callFake(
+    (mockVault.onLock as jasmine.Spy).and.callFake((callback: () => void) => (onLockCallback = callback));
+    (mockVault.onPasscodeRequested as jasmine.Spy).and.callFake(
       (callback: (flag: boolean) => Promise<void>) => (onPasscodeRequestedCallback = callback)
     );
-    (mockVault.lock as any).and.callFake(() => onLockCallback());
+    (mockVault.lock as jasmine.Spy).and.callFake(() => onLockCallback());
     mockVault.config = {
       key: 'test',
       type: VaultType.SecureStorage,
@@ -68,7 +68,7 @@ describe('SessionVaultService', () => {
     });
     service = TestBed.inject(SessionVaultService);
     const factory = TestBed.inject(VaultFactoryService);
-    (factory.create as any)
+    (factory.create as jasmine.Spy)
       .withArgs({
         key: 'io.ionic.auth-playground-ng-preferences',
         type: VaultType.SecureStorage,
@@ -153,7 +153,7 @@ describe('SessionVaultService', () => {
     describe('on mobile', () => {
       beforeEach(() => {
         const platform = TestBed.inject(Platform);
-        (platform.is as any).withArgs('hybrid').and.returnValue(true);
+        (platform.is as jasmine.Spy).withArgs('hybrid').and.returnValue(true);
       });
 
       it('uses a session PIN if no system PIN is set', async () => {
@@ -198,7 +198,7 @@ describe('SessionVaultService', () => {
     describe('on web', () => {
       beforeEach(() => {
         const platform = TestBed.inject(Platform);
-        (platform.is as any).withArgs('hybrid').and.returnValue(false);
+        (platform.is as jasmine.Spy).withArgs('hybrid').and.returnValue(false);
       });
 
       it('does not update the config', async () => {
@@ -215,15 +215,17 @@ describe('SessionVaultService', () => {
       { empty: false, locked: false },
     ].forEach(({ empty, locked }) =>
       it(`is ${!empty && locked} for ${empty} ${locked}`, async () => {
-        (mockVault.isEmpty as any).and.returnValue(Promise.resolve(empty));
-        (mockVault.isLocked as any).and.returnValue(Promise.resolve(locked));
+        (mockVault.isEmpty as jasmine.Spy).and.returnValue(Promise.resolve(empty));
+        (mockVault.isLocked as jasmine.Spy).and.returnValue(Promise.resolve(locked));
         expect(await service.canUnlock()).toBe(!empty && locked);
       })
     );
 
     describe('when "NeverLock"', () => {
       beforeEach(() => {
-        (preferencesVault.getValue as any).withArgs('LastUnlockMode').and.returnValue(Promise.resolve('NeverLock'));
+        (preferencesVault.getValue as jasmine.Spy)
+          .withArgs('LastUnlockMode')
+          .and.returnValue(Promise.resolve('NeverLock'));
       });
 
       [
@@ -232,8 +234,8 @@ describe('SessionVaultService', () => {
         { empty: false, locked: false },
       ].forEach(({ empty, locked }) =>
         it(`is false for ${empty} ${locked}`, async () => {
-          (mockVault.isEmpty as any).and.returnValue(Promise.resolve(empty));
-          (mockVault.isLocked as any).and.returnValue(Promise.resolve(locked));
+          (mockVault.isEmpty as jasmine.Spy).and.returnValue(Promise.resolve(empty));
+          (mockVault.isLocked as jasmine.Spy).and.returnValue(Promise.resolve(locked));
           expect(await service.canUnlock()).toBe(false);
         })
       );
@@ -242,7 +244,7 @@ describe('SessionVaultService', () => {
 
   describe('onPasscodeRequested', () => {
     beforeEach(async () => {
-      (modal.onDidDismiss as any).and.returnValue(Promise.resolve({ role: 'cancel' }));
+      (modal.onDidDismiss as jasmine.Spy).and.returnValue(Promise.resolve({ role: 'cancel' }));
       await service.getValue('just-do-this-to-init-the-vault');
     });
 
@@ -267,7 +269,7 @@ describe('SessionVaultService', () => {
     });
 
     it('sets the custom passcode to the PIN', async () => {
-      (modal.onDidDismiss as any).and.returnValue(Promise.resolve({ data: '4203', role: 'OK' }));
+      (modal.onDidDismiss as jasmine.Spy).and.returnValue(Promise.resolve({ data: '4203', role: 'OK' }));
       await onPasscodeRequestedCallback(false);
       expect(mockVault.setCustomPasscode).toHaveBeenCalledTimes(1);
       expect(mockVault.setCustomPasscode).toHaveBeenCalledWith('4203');
@@ -333,7 +335,7 @@ describe('SessionVaultService', () => {
 
   describe('getAuthProvider', () => {
     it('resolves the set auth provider', async () => {
-      (mockVault.getValue as any).withArgs('AuthProvider').and.returnValue(Promise.resolve('Azure'));
+      (mockVault.getValue as jasmine.Spy).withArgs('AuthProvider').and.returnValue(Promise.resolve('Azure'));
       expect(await service.getAuthProvider()).toEqual('Azure');
     });
   });
@@ -355,7 +357,9 @@ describe('SessionVaultService', () => {
         });
 
         it('resolves the access token', async () => {
-          (mockVault.getValue as any).withArgs('AccessToken').and.returnValue(Promise.resolve('my-access-token'));
+          (mockVault.getValue as jasmine.Spy)
+            .withArgs('AccessToken')
+            .and.returnValue(Promise.resolve('my-access-token'));
           expect(await service.getAccessToken()).toEqual('my-access-token');
         });
       });
@@ -368,7 +372,9 @@ describe('SessionVaultService', () => {
         });
 
         it('resolves the access token', async () => {
-          (mockVault.getValue as any).withArgs('AccessTokenFooBar').and.returnValue(Promise.resolve('my-access-token'));
+          (mockVault.getValue as jasmine.Spy)
+            .withArgs('AccessTokenFooBar')
+            .and.returnValue(Promise.resolve('my-access-token'));
           expect(await service.getAccessToken('FooBar')).toEqual('my-access-token');
         });
       });
@@ -382,7 +388,7 @@ describe('SessionVaultService', () => {
       });
 
       it('resolves the auth response', async () => {
-        (mockVault.getValue as any)
+        (mockVault.getValue as jasmine.Spy)
           .withArgs('AuthResponse')
           .and.returnValue(Promise.resolve({ foo: 'bar', bar: 'foo', baz: 'qux' }));
         expect(await service.getAuthResponse()).toEqual({ foo: 'bar', bar: 'foo', baz: 'qux' });
@@ -397,7 +403,7 @@ describe('SessionVaultService', () => {
       });
 
       it('resolves the id token', async () => {
-        (mockVault.getValue as any).withArgs('IdToken').and.returnValue(Promise.resolve('my-id-token'));
+        (mockVault.getValue as jasmine.Spy).withArgs('IdToken').and.returnValue(Promise.resolve('my-id-token'));
         expect(await service.getIdToken()).toEqual('my-id-token');
       });
     });
@@ -410,7 +416,9 @@ describe('SessionVaultService', () => {
       });
 
       it('resolves the refresh token', async () => {
-        (mockVault.getValue as any).withArgs('RefreshToken').and.returnValue(Promise.resolve('my-refresh-token'));
+        (mockVault.getValue as jasmine.Spy)
+          .withArgs('RefreshToken')
+          .and.returnValue(Promise.resolve('my-refresh-token'));
         expect(await service.getRefreshToken()).toEqual('my-refresh-token');
       });
     });

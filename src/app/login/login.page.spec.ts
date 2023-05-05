@@ -161,7 +161,7 @@ describe('LoginPage', () => {
     describe('on failure', () => {
       beforeEach(() => {
         const auth = TestBed.inject(AuthenticationExpediterService);
-        (auth.login as any).and.returnValue(Promise.reject(new Error('this shall not be')));
+        (auth.login as jasmine.Spy).and.returnValue(Promise.reject(new Error('this shall not be')));
       });
 
       it('display a generic error message', fakeAsync(() => {
@@ -229,7 +229,7 @@ describe('LoginPage', () => {
     describe('on failure', () => {
       beforeEach(() => {
         const auth = TestBed.inject(AuthenticationExpediterService);
-        (auth.login as any).and.returnValue(Promise.reject(new Error('this shall not be')));
+        (auth.login as jasmine.Spy).and.returnValue(Promise.reject(new Error('this shall not be')));
       });
 
       it('display a generic error message', fakeAsync(() => {
@@ -297,7 +297,7 @@ describe('LoginPage', () => {
     describe('on failure', () => {
       beforeEach(() => {
         const auth = TestBed.inject(AuthenticationExpediterService);
-        (auth.login as any).and.returnValue(Promise.reject(new Error('this shall not be')));
+        (auth.login as jasmine.Spy).and.returnValue(Promise.reject(new Error('this shall not be')));
       });
 
       it('display a generic error message', fakeAsync(() => {

@@ -27,10 +27,10 @@ describe('ValueListPage', () => {
     fixture = TestBed.createComponent(ValueListPage);
     component = fixture.componentInstance;
     const sessionVault = TestBed.inject(SessionVaultService);
-    (sessionVault.getKeys as any).and.returnValue(Promise.resolve(['foo', 'bar', 'baz']));
-    (sessionVault.getValue as any).withArgs('foo').and.returnValue(Promise.resolve('cat'));
-    (sessionVault.getValue as any).withArgs('bar').and.returnValue(Promise.resolve('dog'));
-    (sessionVault.getValue as any).withArgs('baz').and.returnValue(Promise.resolve('mouse'));
+    (sessionVault.getKeys as jasmine.Spy).and.returnValue(Promise.resolve(['foo', 'bar', 'baz']));
+    (sessionVault.getValue as jasmine.Spy).withArgs('foo').and.returnValue(Promise.resolve('cat'));
+    (sessionVault.getValue as jasmine.Spy).withArgs('bar').and.returnValue(Promise.resolve('dog'));
+    (sessionVault.getValue as jasmine.Spy).withArgs('baz').and.returnValue(Promise.resolve('mouse'));
     fixture.detectChanges();
   }));
 

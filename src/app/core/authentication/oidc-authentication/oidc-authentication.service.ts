@@ -44,7 +44,7 @@ export class OIDCAuthenticationService implements Authenticator {
     try {
       const res = await AuthConnect.login(this.provider, this.options);
       this.sessionVault.setValue(this.authResultKey, res);
-    } catch (err: any) {
+    } catch (err) {
       // eslint-disable-next-line
       console.log('login error:', err);
       const message: string = err.errorMessage;

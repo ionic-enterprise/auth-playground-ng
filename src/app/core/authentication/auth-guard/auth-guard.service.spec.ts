@@ -34,7 +34,7 @@ describe('AuthGuardService', () => {
 
     describe('when the user is authenticated', () => {
       beforeEach(() => {
-        (authenticationService.isAuthenticated as any).and.returnValue(Promise.resolve(true));
+        (authenticationService.isAuthenticated as jasmine.Spy).and.returnValue(Promise.resolve(true));
       });
 
       it('resolves to true', async () => {
@@ -50,7 +50,7 @@ describe('AuthGuardService', () => {
 
     describe('when the user is not authenticated', () => {
       beforeEach(() => {
-        (authenticationService.isAuthenticated as any).and.returnValue(Promise.resolve(false));
+        (authenticationService.isAuthenticated as jasmine.Spy).and.returnValue(Promise.resolve(false));
       });
 
       it('resolves to false', async () => {

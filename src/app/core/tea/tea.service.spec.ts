@@ -4,9 +4,11 @@ import { Tea } from '@app/models';
 import { environment } from '@env/environment';
 import { TeaService } from './tea.service';
 
+type TeaResponse = Omit<Tea, 'image'>;
+
 describe('TeaService', () => {
   let expectedTeas: Array<Tea>;
-  let resultTeas: Array<any>;
+  let resultTeas: Array<TeaResponse>;
   let httpTestingController: HttpTestingController;
   let service: TeaService;
 

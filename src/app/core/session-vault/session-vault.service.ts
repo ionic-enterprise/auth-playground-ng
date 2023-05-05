@@ -7,7 +7,6 @@ import {
   Device,
   DeviceSecurityType,
   IdentityVaultConfig,
-  SupportedBiometricType,
   Vault,
   VaultType,
 } from '@ionic-enterprise/identity-vault';

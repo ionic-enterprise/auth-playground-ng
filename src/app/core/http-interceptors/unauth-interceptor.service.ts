@@ -11,7 +11,9 @@ export class UnauthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       tap(
-        (event: HttpEvent<any>) => {},
+        (event: HttpEvent<any>) => {
+          null;
+        },
         (err: any) => {
           if (err instanceof HttpErrorResponse && err.status === 401) {
             this.navController.navigateRoot(['/', 'login']);

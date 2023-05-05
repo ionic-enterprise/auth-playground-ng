@@ -48,8 +48,8 @@ describe('DeviceInfoPage', () => {
     }));
 
     it('resets the flag', fakeAsync(() => {
-      (Device.isHideScreenOnBackgroundEnabled as any).calls.reset();
-      (Device.isHideScreenOnBackgroundEnabled as any).and.returnValue(Promise.resolve(false));
+      (Device.isHideScreenOnBackgroundEnabled as jasmine.Spy).calls.reset();
+      (Device.isHideScreenOnBackgroundEnabled as jasmine.Spy).and.returnValue(Promise.resolve(false));
       const button = fixture.debugElement.query(By.css('[data-testid="toggle-privacy-button"]'));
       click(fixture, button.nativeElement);
       tick();
@@ -82,7 +82,7 @@ describe('DeviceInfoPage', () => {
     }));
 
     it('informs the user if it failed', fakeAsync(() => {
-      (Device.showBiometricPrompt as any).and.returnValue(Promise.reject(new Error('Cancel')));
+      (Device.showBiometricPrompt as jasmine.Spy).and.returnValue(Promise.reject(new Error('Cancel')));
       const alertController = TestBed.inject(AlertController);
       const button = fixture.debugElement.query(By.css('[data-testid="show-biometrics-button"]'));
       click(fixture, button.nativeElement);
