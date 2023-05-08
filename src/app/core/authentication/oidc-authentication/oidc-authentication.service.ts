@@ -58,7 +58,7 @@ export class OIDCAuthenticationService implements Authenticator {
         const res = await AuthConnect.login(this.provider, {
           ...this.options,
           discoveryUrl:
-            'https://vikingsquad.b2clogin.com/vikingsquad.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_password_reset',
+            'https://dtjacdemo.b2clogin.com/dtjacdemo.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_password_reset',
         });
         this.sessionVault.setValue(this.authResultKey, res);
       } else {
@@ -91,8 +91,8 @@ export class OIDCAuthenticationService implements Authenticator {
     const urls = this.platform.is('hybrid')
       ? {}
       : {
-          redirectUri: 'http://localhost:8100/login',
-          logoutUrl: 'http://localhost:8100/login',
+          redirectUri: environment.webRedirects.redirectUri,
+          logoutUrl: environment.webRedirects.logoutUrl,
         };
 
     return {

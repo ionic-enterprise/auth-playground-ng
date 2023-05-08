@@ -17,4 +17,9 @@ export const routes: Routes = [
     path: 'unlock',
     loadComponent: () => import('./unlock/unlock.page').then((m) => m.UnlockPage),
   },
+  {
+    path: 'auth-action-complete',
+    loadComponent: () =>
+      import('./auth-action-complete/auth-action-complete.page').then((m) => m.AuthActionCompletePage),
+  },
 ];
