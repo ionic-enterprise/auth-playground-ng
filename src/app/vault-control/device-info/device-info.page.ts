@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Device } from '@ionic-enterprise/identity-vault';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-device-info',
@@ -14,6 +14,8 @@ import { AlertController, IonicModule } from '@ionic/angular';
 export class DeviceInfoPage implements OnInit {
   biometricStrength: string;
   hasSecureHardware: boolean;
+  canTogglePrivacyScreen: boolean;
+  isBiometricsAllowed: string;
   isBiometricsEnabled: boolean;
   isBiometricsSupported: boolean;
   isPrivacyScreenEnabled: boolean;
@@ -21,17 +23,23 @@ export class DeviceInfoPage implements OnInit {
   isSystemPasscodeSet: boolean;
   availableHardware: Array<string>;
 
-  constructor(private alertController: AlertController) {}
+  constructor(
+    private alertController: AlertController,
+    private platform: Platform,
+  ) {}
 
   async ngOnInit() {
     this.biometricStrength = await Device.getBiometricStrengthLevel();
     this.hasSecureHardware = await Device.hasSecureHardware();
+    this.isBiometricsAllowed = await Device.isBiometricsAllowed();
     this.isBiometricsEnabled = await Device.isBiometricsEnabled();
     this.isBiometricsSupported = await Device.isBiometricsSupported();
     this.isPrivacyScreenEnabled = await Device.isHideScreenOnBackgroundEnabled();
     this.isLockedOutOfBiometrics = await Device.isLockedOutOfBiometrics();
     this.isSystemPasscodeSet = await Device.isSystemPasscodeSet();
     this.availableHardware = await Device.getAvailableHardware();
+    this.availableHardware = await Device.getAvailableHardware();
+    this.canTogglePrivacyScreen = this.platform.is('hybrid');
   }
 
   async togglePrivacy() {

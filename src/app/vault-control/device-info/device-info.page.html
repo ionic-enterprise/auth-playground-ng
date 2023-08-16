@@ -24,6 +24,10 @@
       <ion-note slot="end">{{hasSecureHardware}}</ion-note>
     </ion-item>
     <ion-item>
+      <ion-label>Biometrics Allowed</ion-label>
+      <ion-note slot="end">{{isBiometricsAllowed}}</ion-note>
+    </ion-item>
+    <ion-item>
       <ion-label>Biometrics Supported</ion-label>
       <ion-note slot="end">{{isBiometricsSupported}}</ion-note>
     </ion-item>
@@ -45,7 +49,11 @@
     </ion-item>
     <ion-item>
       <ion-label>
-        <ion-button data-testid="toggle-privacy-button" expand="block" (click)="togglePrivacy()"
+        <ion-button
+          data-testid="toggle-privacy-button"
+          expand="block"
+          (click)="togglePrivacy()"
+          [disabled]="!canTogglePrivacyScreen"
           >Toggle Privacy Screen</ion-button
         >
       </ion-label>
@@ -55,7 +63,7 @@
         <ion-button
           data-testid="show-biometrics-button"
           expand="block"
-          [disabled]="!isBiometricsEnabled"
+          [disabled]="!isBiometricsEnabled || isBiometricsAllowed !== 'granted'"
           (click)="showBiometricPrompt()"
           >Show Biometrics Prompt</ion-button
         >

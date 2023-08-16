@@ -1,7 +1,12 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BiometricSecurityStrength, Device, SupportedBiometricType } from '@ionic-enterprise/identity-vault';
+import {
+  BiometricPermissionState,
+  BiometricSecurityStrength,
+  Device,
+  SupportedBiometricType,
+} from '@ionic-enterprise/identity-vault';
 import { AlertController } from '@ionic/angular';
 import { createOverlayControllerMock } from '@test/mocks';
 import { click } from '@test/util';
@@ -23,6 +28,7 @@ describe('DeviceInfoPage', () => {
 
     spyOn(Device, 'getBiometricStrengthLevel').and.returnValue(Promise.resolve(BiometricSecurityStrength.Strong));
     spyOn(Device, 'hasSecureHardware').and.returnValue(Promise.resolve(true));
+    spyOn(Device, 'isBiometricsAllowed').and.returnValue(Promise.resolve(BiometricPermissionState.Prompt));
     spyOn(Device, 'isBiometricsEnabled').and.returnValue(Promise.resolve(false));
     spyOn(Device, 'isBiometricsSupported').and.returnValue(Promise.resolve(true));
     spyOn(Device, 'isHideScreenOnBackgroundEnabled').and.returnValue(Promise.resolve(true));

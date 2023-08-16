@@ -1,7 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "io.ionic.authplaygroundng"
+
+  packagingOptions {
+    resources {
+      excludes += ['META-INF/NOTICE', 'META-INF/LICENSE']
+    }
+  }
+  namespace "io.ionic.authplaygroundng"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "io.ionic.authplaygroundng"
