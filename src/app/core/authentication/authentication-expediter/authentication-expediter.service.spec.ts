@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { AuthProvider } from '@app/models';
+import { AuthVendor } from '@app/models';
 import { SessionVaultService } from '../../session-vault/session-vault.service';
 import { createSessionVaultServiceMock } from '../../testing';
 import { BasicAuthenticationService } from '../basic-authentication/basic-authentication.service';
@@ -26,32 +26,32 @@ describe('AuthenticationExpediterService', () => {
     expect(service).toBeTruthy();
   });
 
-  ['Auth0', 'AWS', 'Azure'].forEach((provider: AuthProvider) => {
-    describe(`when using ${provider}`, () => {
+  ['Auth0', 'AWS', 'Azure'].forEach((vendor: AuthVendor) => {
+    describe(`when using ${vendor}`, () => {
       beforeEach(() => {
         const vault = TestBed.inject(SessionVaultService);
-        (vault.getAuthProvider as jasmine.Spy).and.returnValue(Promise.resolve(provider));
+        (vault.getAuthVendor as jasmine.Spy).and.returnValue(Promise.resolve(vendor));
       });
 
       describe('login', () => {
         it('sets up the OIDC service', async () => {
           const oidc = TestBed.inject(OIDCAuthenticationService);
-          await service.login(provider);
+          await service.login(vendor);
           expect(oidc.setAuthProvider).toHaveBeenCalledTimes(1);
-          expect(oidc.setAuthProvider).toHaveBeenCalledWith(provider);
+          expect(oidc.setAuthProvider).toHaveBeenCalledWith(vendor);
         });
 
         it('calls the OIDC login', async () => {
           const oidc = TestBed.inject(OIDCAuthenticationService);
-          await service.login(provider);
+          await service.login(vendor);
           expect(oidc.login).toHaveBeenCalledTimes(1);
         });
 
-        it('saves the auth provider', async () => {
+        it('saves the auth vendor', async () => {
           const vault = TestBed.inject(SessionVaultService);
-          await service.login(provider);
-          expect(vault.setAuthProvider).toHaveBeenCalledTimes(1);
-          expect(vault.setAuthProvider).toHaveBeenCalledWith(provider);
+          await service.login(vendor);
+          expect(vault.setAuthVendor).toHaveBeenCalledTimes(1);
+          expect(vault.setAuthVendor).toHaveBeenCalledWith(vendor);
         });
       });
 
@@ -60,7 +60,7 @@ describe('AuthenticationExpediterService', () => {
           const oidc = TestBed.inject(OIDCAuthenticationService);
           await service.logout();
           expect(oidc.setAuthProvider).toHaveBeenCalledTimes(1);
-          expect(oidc.setAuthProvider).toHaveBeenCalledWith(provider);
+          expect(oidc.setAuthProvider).toHaveBeenCalledWith(vendor);
         });
 
         it('calls the OIDC logout', async () => {
@@ -75,7 +75,7 @@ describe('AuthenticationExpediterService', () => {
           const oidc = TestBed.inject(OIDCAuthenticationService);
           await service.getAccessToken();
           expect(oidc.setAuthProvider).toHaveBeenCalledTimes(1);
-          expect(oidc.setAuthProvider).toHaveBeenCalledWith(provider);
+          expect(oidc.setAuthProvider).toHaveBeenCalledWith(vendor);
         });
 
         it('gets the OIDC access token', async () => {
@@ -90,7 +90,7 @@ describe('AuthenticationExpediterService', () => {
           const oidc = TestBed.inject(OIDCAuthenticationService);
           await service.isAuthenticated();
           expect(oidc.setAuthProvider).toHaveBeenCalledTimes(1);
-          expect(oidc.setAuthProvider).toHaveBeenCalledWith(provider);
+          expect(oidc.setAuthProvider).toHaveBeenCalledWith(vendor);
         });
 
         it('checks with OIDC if the user is authenticated', async () => {
@@ -105,7 +105,7 @@ describe('AuthenticationExpediterService', () => {
   describe('when using Basic', () => {
     beforeEach(() => {
       const vault = TestBed.inject(SessionVaultService);
-      (vault.getAuthProvider as jasmine.Spy).and.returnValue(Promise.resolve('Basic'));
+      (vault.getAuthVendor as jasmine.Spy).and.returnValue(Promise.resolve('Basic'));
     });
 
     describe('login', () => {
@@ -116,11 +116,11 @@ describe('AuthenticationExpediterService', () => {
         expect(basic.login).toHaveBeenCalledWith('fred.rogers@thehood.org', 'Mak3Be!ieve');
       });
 
-      it('saves the auth provider', async () => {
+      it('saves the auth vendor', async () => {
         const vault = TestBed.inject(SessionVaultService);
         await service.login('Basic', { email: 'fred.rogers@thehood.org', password: 'Mak3Be!ieve' });
-        expect(vault.setAuthProvider).toHaveBeenCalledTimes(1);
-        expect(vault.setAuthProvider).toHaveBeenCalledWith('Basic');
+        expect(vault.setAuthVendor).toHaveBeenCalledTimes(1);
+        expect(vault.setAuthVendor).toHaveBeenCalledWith('Basic');
       });
     });
 

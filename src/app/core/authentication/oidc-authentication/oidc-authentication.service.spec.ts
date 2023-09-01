@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { SessionVaultService } from '@app/core/session-vault/session-vault.service';
 import { createSessionVaultServiceMock } from '@app/core/testing';
-import { AuthProvider } from '@app/models';
+import { AuthVendor } from '@app/models';
 import { environment } from '@env/environment';
 import {
   Auth0Provider,
@@ -63,16 +63,16 @@ const testAuthResult = {
       });
     });
 
-    ['Auth0', 'Azure', 'AWS'].forEach((provider: AuthProvider) => {
-      describe(provider, () => {
+    ['Auth0', 'Azure', 'AWS'].forEach((vendor: AuthVendor) => {
+      describe(vendor, () => {
         let expectedProviderType: typeof Auth0Provider | typeof AzureProvider | typeof CognitoProvider;
         let expectedOptions: ProviderOptions;
         beforeEach(() => {
-          service.setAuthProvider(provider);
-          if (provider === 'Auth0') {
+          service.setAuthProvider(vendor);
+          if (vendor === 'Auth0') {
             expectedOptions = { ...environment.auth0Config, ...(isNative ? {} : environment.webRedirects) };
             expectedProviderType = Auth0Provider;
-          } else if (provider === 'AWS') {
+          } else if (vendor === 'AWS') {
             expectedOptions = { ...environment.awsConfig, ...(isNative ? {} : environment.webRedirects) };
             expectedProviderType = CognitoProvider;
           } else {
@@ -153,7 +153,7 @@ const testAuthResult = {
                   expect(AuthConnect.refreshSession).toHaveBeenCalledTimes(1);
                   expect(AuthConnect.refreshSession).toHaveBeenCalledWith(
                     jasmine.any(expectedProviderType),
-                    testAuthResult as AuthResult
+                    testAuthResult as AuthResult,
                   );
                 });
 
@@ -269,7 +269,7 @@ const testAuthResult = {
                   expect(AuthConnect.refreshSession).toHaveBeenCalledTimes(1);
                   expect(AuthConnect.refreshSession).toHaveBeenCalledWith(
                     jasmine.any(expectedProviderType),
-                    testAuthResult as AuthResult
+                    testAuthResult as AuthResult,
                   );
                 });
 
@@ -369,7 +369,7 @@ const testAuthResult = {
               expect(AuthConnect.logout).toHaveBeenCalledTimes(1);
               expect(AuthConnect.logout).toHaveBeenCalledWith(
                 jasmine.any(expectedProviderType),
-                testAuthResult as AuthResult
+                testAuthResult as AuthResult,
               );
             });
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SessionVaultService } from '@app/core/session-vault/session-vault.service';
-import { AuthProvider } from '@app/models';
+import { AuthVendor } from '@app/models';
 import { environment } from '@env/environment';
 import {
   Auth0Provider,
@@ -22,15 +22,18 @@ export class OIDCAuthenticationService implements Authenticator {
   private options: ProviderOptions = null;
   private provider: Auth0Provider | AzureProvider | CognitoProvider | null = null;
 
-  constructor(private sessionVault: SessionVaultService, private platform: Platform) {
+  constructor(
+    private sessionVault: SessionVaultService,
+    private platform: Platform,
+  ) {
     this.initialize();
   }
 
-  setAuthProvider(provider: AuthProvider): void {
-    if (provider === 'Auth0') {
+  setAuthProvider(vendor: AuthVendor): void {
+    if (vendor === 'Auth0') {
       this.options = this.handleWebOptions(environment.auth0Config);
       this.provider = new Auth0Provider();
-    } else if (provider === 'AWS') {
+    } else if (vendor === 'AWS') {
       this.options = this.handleWebOptions(environment.awsConfig);
       this.provider = new CognitoProvider();
     } else {

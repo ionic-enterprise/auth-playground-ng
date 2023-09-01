@@ -22,8 +22,8 @@ export const createSessionVaultServiceMock = () => {
     lock: Promise.resolve(),
     setValue: Promise.resolve(),
     unlock: Promise.resolve(),
-    setAuthProvider: Promise.resolve(),
-    getAuthProvider: Promise.resolve(null),
+    setAuthVendor: Promise.resolve(),
+    getAuthVendor: Promise.resolve(null),
   });
   (service as any).locked = new Subject();
   return service;

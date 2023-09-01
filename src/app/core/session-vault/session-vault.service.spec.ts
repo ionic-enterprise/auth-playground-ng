@@ -42,7 +42,7 @@ describe('SessionVaultService', () => {
     mockVault = jasmine.createSpyObj<Vault>('Vault', vaultObject);
     (mockVault.onLock as jasmine.Spy).and.callFake((callback: () => void) => (onLockCallback = callback));
     (mockVault.onPasscodeRequested as jasmine.Spy).and.callFake(
-      (callback: (flag: boolean) => Promise<void>) => (onPasscodeRequestedCallback = callback)
+      (callback: (flag: boolean) => Promise<void>) => (onPasscodeRequestedCallback = callback),
     );
     (mockVault.lock as jasmine.Spy).and.callFake(() => onLockCallback());
     mockVault.config = {
@@ -145,7 +145,7 @@ describe('SessionVaultService', () => {
         expect(mockVault.updateConfig).toHaveBeenCalledWith(expectedConfig);
         expect(preferencesVault.setValue).toHaveBeenCalledTimes(1);
         expect(preferencesVault.setValue).toHaveBeenCalledWith('LastUnlockMode', unlockMode);
-      })
+      }),
     );
   });
 
@@ -218,7 +218,7 @@ describe('SessionVaultService', () => {
         (mockVault.isEmpty as jasmine.Spy).and.returnValue(Promise.resolve(empty));
         (mockVault.isLocked as jasmine.Spy).and.returnValue(Promise.resolve(locked));
         expect(await service.canUnlock()).toBe(!empty && locked);
-      })
+      }),
     );
 
     describe('when "NeverLock"', () => {
@@ -237,7 +237,7 @@ describe('SessionVaultService', () => {
           (mockVault.isEmpty as jasmine.Spy).and.returnValue(Promise.resolve(empty));
           (mockVault.isLocked as jasmine.Spy).and.returnValue(Promise.resolve(locked));
           expect(await service.canUnlock()).toBe(false);
-        })
+        }),
       );
     });
   });
@@ -325,18 +325,18 @@ describe('SessionVaultService', () => {
     });
   });
 
-  describe('setAuthProvider', () => {
+  describe('setAuthVendor', () => {
     it('sets the auth provider value in the vault', async () => {
-      await service.setAuthProvider('AWS');
+      await service.setAuthVendor('AWS');
       expect(mockVault.setValue).toHaveBeenCalledTimes(1);
-      expect(mockVault.setValue).toHaveBeenCalledWith('AuthProvider', 'AWS');
+      expect(mockVault.setValue).toHaveBeenCalledWith('AuthVendor', 'AWS');
     });
   });
 
-  describe('getAuthProvider', () => {
+  describe('getAuthVendor', () => {
     it('resolves the set auth provider', async () => {
-      (mockVault.getValue as jasmine.Spy).withArgs('AuthProvider').and.returnValue(Promise.resolve('Azure'));
-      expect(await service.getAuthProvider()).toEqual('Azure');
+      (mockVault.getValue as jasmine.Spy).withArgs('AuthVendor').and.returnValue(Promise.resolve('Azure'));
+      expect(await service.getAuthVendor()).toEqual('Azure');
     });
   });
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthProvider } from '@app/models';
+import { AuthVendor } from '@app/models';
 import { PinDialogComponent } from '@app/pin-dialog/pin-dialog.component';
 import {
   BiometricPermissionState,
@@ -29,7 +29,7 @@ export class SessionVaultService {
   constructor(
     private modalController: ModalController,
     private platform: Platform,
-    private vaultFactory: VaultFactoryService
+    private vaultFactory: VaultFactoryService,
   ) {
     this.lockedSubject = new Subject();
   }
@@ -73,12 +73,12 @@ export class SessionVaultService {
     return !(await this.neverLock()) && !(await this.vault.isEmpty()) && (await this.vault.isLocked());
   }
 
-  setAuthProvider(value: AuthProvider): Promise<void> {
-    return this.setValue('AuthProvider', value);
+  setAuthVendor(value: AuthVendor): Promise<void> {
+    return this.setValue('AuthVendor', value);
   }
 
-  getAuthProvider(): Promise<AuthProvider | undefined | null> {
-    return this.getValue('AuthProvider');
+  getAuthVendor(): Promise<AuthVendor | undefined | null> {
+    return this.getValue('AuthVendor');
   }
 
   async initializeUnlockMode() {
@@ -220,7 +220,7 @@ export class SessionVaultService {
         this.vault.onUnlock(() => this.lockedSubject.next(false));
 
         this.vault.onPasscodeRequested(async (isPasscodeSetRequest: boolean) =>
-          this.onPasscodeRequest(isPasscodeSetRequest)
+          this.onPasscodeRequest(isPasscodeSetRequest),
         );
         resolve();
       });
