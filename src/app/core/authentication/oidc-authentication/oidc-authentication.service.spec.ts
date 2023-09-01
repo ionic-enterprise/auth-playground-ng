@@ -27,6 +27,12 @@ const testAuthResult = {
   idToken: 'test-id-token',
 };
 
+const builtAuthResult = {
+  accessToken: 'built-access-token',
+  refreshToken: 'built-refresh-token',
+  idToken: 'built-id-token',
+};
+
 [true, false].forEach((isNative: boolean) => {
   describe(`OIDC Authentication Service on ${isNative ? 'native' : 'web'}`, () => {
     let service: OIDCAuthenticationService;
@@ -334,6 +340,7 @@ const testAuthResult = {
         describe('logout', () => {
           beforeEach(() => {
             spyOn(AuthConnect, 'logout').and.callFake(() => Promise.resolve());
+            spyOn(AuthConnect, 'buildAuthResult').and.callFake(() => Promise.resolve(builtAuthResult as AuthResult));
             spyOn(AuthConnect, 'isAccessTokenExpired').and.callFake(() => Promise.resolve(false));
             spyOn(AuthConnect, 'isRefreshTokenAvailable').and.callFake(() => Promise.resolve(true));
           });
@@ -351,9 +358,28 @@ const testAuthResult = {
               (sessionVault.getValue as jasmine.Spy).and.resolveTo(undefined);
             });
 
-            it('does not call logout ', async () => {
+            it('builds an auth result', async () => {
               await service.logout();
-              expect(AuthConnect.logout).not.toHaveBeenCalled();
+              expect(AuthConnect.buildAuthResult).toHaveBeenCalledOnceWith(
+                jasmine.any(expectedProviderType),
+                expectedOptions,
+                {},
+              );
+            });
+
+            it('calls logout with the built auth result', async () => {
+              await service.logout();
+              expect(AuthConnect.logout).toHaveBeenCalledTimes(1);
+              expect(AuthConnect.logout).toHaveBeenCalledWith(
+                jasmine.any(expectedProviderType),
+                builtAuthResult as AuthResult,
+              );
+            });
+
+            it('clears the auth result', async () => {
+              const sessionVault = TestBed.inject(SessionVaultService);
+              await service.logout();
+              expect(sessionVault.clear).toHaveBeenCalledTimes(1);
             });
           });
 

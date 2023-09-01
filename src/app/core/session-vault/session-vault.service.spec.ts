@@ -11,6 +11,7 @@ import { ModalController, Platform } from '@ionic/angular';
 import { createOverlayControllerMock, createOverlayElementMock, createPlatformMock } from '@test/mocks';
 import { SessionVaultService, UnlockMode } from './session-vault.service';
 import { VaultFactoryService } from './vault-factory.service';
+import { Preferences } from '@capacitor/preferences';
 
 describe('SessionVaultService', () => {
   let modal: HTMLIonModalElement;
@@ -326,16 +327,18 @@ describe('SessionVaultService', () => {
   });
 
   describe('setAuthVendor', () => {
-    it('sets the auth provider value in the vault', async () => {
+    it('sets the auth provider value in preferences', async () => {
+      spyOn(Preferences, 'set');
       await service.setAuthVendor('AWS');
-      expect(mockVault.setValue).toHaveBeenCalledTimes(1);
-      expect(mockVault.setValue).toHaveBeenCalledWith('AuthVendor', 'AWS');
+      expect(Preferences.set).toHaveBeenCalledTimes(1);
+      expect(Preferences.set).toHaveBeenCalledWith({ key: 'AuthVendor', value: 'AWS' });
     });
   });
 
   describe('getAuthVendor', () => {
     it('resolves the set auth provider', async () => {
-      (mockVault.getValue as jasmine.Spy).withArgs('AuthVendor').and.returnValue(Promise.resolve('Azure'));
+      spyOn(Preferences, 'get');
+      (Preferences.get as jasmine.Spy).withArgs({ key: 'AuthVendor' }).and.resolveTo({ value: 'Azure' });
       expect(await service.getAuthVendor()).toEqual('Azure');
     });
   });

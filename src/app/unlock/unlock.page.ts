@@ -15,7 +15,7 @@ export class UnlockPage {
   constructor(
     private auth: AuthenticationExpediterService,
     private navController: NavController,
-    private sessionVault: SessionVaultService
+    private sessionVault: SessionVaultService,
   ) {}
 
   async unlock(): Promise<void> {
@@ -27,6 +27,7 @@ export class UnlockPage {
   }
 
   async redo(): Promise<void> {
+    await this.sessionVault.clear();
     await this.auth.logout();
     this.navController.navigateRoot(['/', 'login']);
   }

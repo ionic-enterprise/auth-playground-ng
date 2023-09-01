@@ -92,12 +92,21 @@ describe('UnlockPage', () => {
   });
 
   describe('the redo button', () => {
-    it('performs a logout', () => {
+    it('clears the vault', fakeAsync(() => {
+      const session = TestBed.inject(SessionVaultService);
+      const button = fixture.debugElement.query(By.css('[data-testid="redo-button"]'));
+      click(fixture, button.nativeElement);
+      tick();
+      expect(session.clear).toHaveBeenCalledTimes(1);
+    }));
+
+    it('performs a logout', fakeAsync(() => {
       const auth = TestBed.inject(AuthenticationExpediterService);
       const button = fixture.debugElement.query(By.css('[data-testid="redo-button"]'));
       click(fixture, button.nativeElement);
+      tick();
       expect(auth.logout).toHaveBeenCalledTimes(1);
-    });
+    }));
 
     it('navigates to the login page', fakeAsync(() => {
       const navController = TestBed.inject(NavController);

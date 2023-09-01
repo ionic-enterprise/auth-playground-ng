@@ -13,6 +13,7 @@ import {
 import { ModalController, Platform } from '@ionic/angular';
 import { Observable, Subject } from 'rxjs';
 import { VaultFactoryService } from './vault-factory.service';
+import { Preferences } from '@capacitor/preferences';
 
 export type UnlockMode = 'Device' | 'SystemPIN' | 'SessionPIN' | 'NeverLock' | 'ForceLogin';
 
@@ -74,11 +75,12 @@ export class SessionVaultService {
   }
 
   setAuthVendor(value: AuthVendor): Promise<void> {
-    return this.setValue('AuthVendor', value);
+    return Preferences.set({ key: 'AuthVendor', value });
   }
 
-  getAuthVendor(): Promise<AuthVendor | undefined | null> {
-    return this.getValue('AuthVendor');
+  async getAuthVendor(): Promise<AuthVendor | null> {
+    const { value } = await Preferences.get({ key: 'AuthVendor' });
+    return value as AuthVendor | null;
   }
 
   async initializeUnlockMode() {

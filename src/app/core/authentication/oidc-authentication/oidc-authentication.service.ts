@@ -83,7 +83,7 @@ export class OIDCAuthenticationService implements Authenticator {
 
   async logout(): Promise<void> {
     await this.initialize();
-    const res = await this.getAuthResult();
+    const res = (await this.getAuthResult()) || (await AuthConnect.buildAuthResult(this.provider, this.options, {}));
     if (res) {
       await AuthConnect.logout(this.provider, res);
       await this.sessionVault.clear();
