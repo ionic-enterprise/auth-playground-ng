@@ -13,10 +13,14 @@ import { SessionVaultService } from './core';
   imports: [CommonModule, IonicModule],
 })
 export class AppComponent implements OnInit {
-  constructor(private navController: NavController, private vault: SessionVaultService) {}
+  constructor(
+    private navController: NavController,
+    private vault: SessionVaultService,
+  ) {}
 
   ngOnInit(): void {
     this.vault.locked.subscribe((lock: boolean) => {
+      console.log('locked', lock);
       if (lock) {
         this.navController.navigateRoot(['/', 'unlock']);
       }

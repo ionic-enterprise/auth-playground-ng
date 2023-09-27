@@ -37,6 +37,7 @@ export class UnlockPage {
       await this.sessionVault.unlock();
       this.navController.navigateRoot(['/']);
     } catch (error) {
+      console.error(error);
       // you could alert or otherwise set an error message
       // the most common failure is the user cancelling, so we just don't navigate
     }
