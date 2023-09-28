@@ -207,6 +207,7 @@ export class SessionVaultService {
         this.vault = this.vaultFactory.create({
           key: 'io.ionic.auth-playground-ng',
           type: VaultType.SecureStorage,
+          deviceSecurityType: DeviceSecurityType.None,
           lockAfterBackgrounded: 20000,
           shouldClearVaultAfterTooManyFailedAttempts: true,
           customPasscodeInvalidUnlockAttempts: 2,
