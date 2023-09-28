@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.vault.locked.subscribe((lock: boolean) => {
-      console.log('locked', lock);
       if (lock) {
         this.navController.navigateRoot(['/', 'unlock']);
       }

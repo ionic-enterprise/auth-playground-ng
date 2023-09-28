@@ -218,13 +218,10 @@ export class SessionVaultService {
           if (this.onLockCallback) {
             this.onLockCallback();
           }
-          console.log('Vault locked');
           this.lockedSubject.next(true);
         });
-        this.vault.onUnlock(() => {
-          console.log('Vault unlocked');
-          this.lockedSubject.next(false);
-        });
+
+        this.vault.onUnlock(() => this.lockedSubject.next(false));
 
         this.vault.onPasscodeRequested(async (isPasscodeSetRequest: boolean) =>
           this.onPasscodeRequest(isPasscodeSetRequest),
